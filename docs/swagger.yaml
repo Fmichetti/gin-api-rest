@@ -1,0 +1,117 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.Aluno:
+    properties:
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      nome:
+        type: string
+      rg:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A Test API using GO, Gin and Gorm
+  title: Test API
+  version: "1.0"
+paths:
+  /alunos:
+    get:
+      description: Exibe todos os alunos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Aluno'
+            type: array
+      tags:
+      - Alunos
+    post:
+      description: Cria um novo aluno
+      parameters:
+      - description: Aluno object
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Aluno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Aluno'
+            type: array
+      tags:
+      - Alunos
+  /alunos/{cpf}:
+    get:
+      description: Realiza uma busca baseada pelo CPF
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      tags:
+      - Alunos
+  /alunos/{id}:
+    delete:
+      description: Realiza uma busca baseada pelo ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Alunos
+    get:
+      description: Realiza uma busca baseada pelo ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Aluno'
+      tags:
+      - Alunos
+    patch:
+      description: Realiza uma edição baseada pelo ID
+      parameters:
+      - description: Aluno object
+        in: body
+        name: aluno
+        required: true
+        schema:
+          $ref: '#/definitions/models.Aluno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Alunos
+swagger: "2.0"

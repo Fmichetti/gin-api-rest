@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/FMichetti/api-go-gin/database"
+	"github.com/FMichetti/api-go-gin/config"
 	"github.com/FMichetti/api-go-gin/models"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +16,7 @@ import (
 func ExibeTodosAlunos(c *gin.Context) {
 	var alunos []models.Aluno
 
-	database.DB.Find(&alunos)
+	config.DB.Find(&alunos)
 
 	c.JSON(http.StatusOK, alunos)
 }
@@ -35,7 +35,7 @@ func CriaNovoAluno(c *gin.Context) {
 		})
 		return
 	}
-	database.DB.Create(&aluno)
+	config.DB.Create(&aluno)
 	c.JSON(http.StatusOK, aluno)
 }
 
@@ -47,7 +47,7 @@ func CriaNovoAluno(c *gin.Context) {
 func BuscaAlunoPorID(c *gin.Context) {
 	var aluno models.Aluno
 	id := c.Params.ByName("id")
-	database.DB.First(&aluno, id)
+	config.DB.First(&aluno, id)
 
 	if aluno.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -68,7 +68,7 @@ func BuscaAlunoPorID(c *gin.Context) {
 func DeletaAlunoPorID(c *gin.Context) {
 	var aluno models.Aluno
 	id := c.Params.ByName("id")
-	db := database.DB.Delete(&aluno, id)
+	db := config.DB.Delete(&aluno, id)
 
 	//verifica se foi removido algum aluno
 	if db.RowsAffected < 1 {
@@ -94,7 +94,7 @@ func DeletaAlunoPorID(c *gin.Context) {
 func EditaAluno(c *gin.Context) {
 	var aluno models.Aluno
 	id := c.Params.ByName("id")
-	db := database.DB.First(&aluno, id)
+	db := config.DB.First(&aluno, id)
 
 	if err := c.ShouldBindJSON(&aluno); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -104,7 +104,7 @@ func EditaAluno(c *gin.Context) {
 		return
 	}
 
-	database.DB.Model(&aluno).UpdateColumns(aluno)
+	config.DB.Model(&aluno).UpdateColumns(aluno)
 
 	//verifica se foi editado algum aluno
 	if db.RowsAffected < 1 {
@@ -127,7 +127,7 @@ func EditaAluno(c *gin.Context) {
 func BuscaAlunoPorCPF(c *gin.Context) {
 	var aluno models.Aluno
 	cpf := c.Params.ByName("cpf")
-	database.DB.Where(&models.Aluno{CPF: cpf}).First(&aluno)
+	config.DB.Where(&models.Aluno{CPF: cpf}).First(&aluno)
 
 	if aluno.CPF == "" {
 		c.JSON(http.StatusNotFound, gin.H{

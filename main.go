@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/FMichetti/api-go-gin/database"
+	"github.com/FMichetti/api-go-gin/config"
 	_ "github.com/FMichetti/api-go-gin/docs"
 	"github.com/FMichetti/api-go-gin/routes"
 )
@@ -13,6 +13,6 @@ import (
 // @host localhost:8080
 
 func main() {
-	database.ConectaComBancoDeDados()
-	routes.HandleRequests()
+	config.ConectaComBancoDeDados()
+	routes.Run()
 }

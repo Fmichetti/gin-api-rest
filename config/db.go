@@ -1,4 +1,4 @@
-package database
+package config
 
 import (
 	"log"
@@ -21,5 +21,5 @@ func ConectaComBancoDeDados() {
 	if err != nil {
 		log.Panic("Erro ao conectar com o banco de dados")
 	}
-	DB.AutoMigrate(&models.Aluno{})
+	DB.AutoMigrate(&models.Aluno{}, &models.User{})
 }

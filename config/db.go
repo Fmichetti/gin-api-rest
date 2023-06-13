@@ -21,5 +21,5 @@ func ConectaComBancoDeDados() {
 	if err != nil {
 		log.Panic("Erro ao conectar com o banco de dados")
 	}
-	DB.AutoMigrate(&models.Aluno{}, &models.User{})
+	DB.AutoMigrate(&models.Aluno{}, &models.User{}, &models.Appointment{}, &models.Patient{})
 }

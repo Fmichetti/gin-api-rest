@@ -24,6 +24,25 @@ definitions:
       updatedAt:
         type: string
     type: object
+  models.Patient:
+    properties:
+      city:
+        type: string
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -114,4 +133,87 @@ paths:
           description: OK
       tags:
       - Alunos
+  /patient:
+    get:
+      description: Exibe todos os pacientes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Patient'
+            type: array
+      tags:
+      - Patient
+    post:
+      description: Cadastra um novo paciente
+      parameters:
+      - description: Patient object
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/models.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Patient'
+            type: array
+      tags:
+      - Patient
+  /patient/{cpf}:
+    get:
+      description: Realiza uma busca baseada pelo CPF
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Patient'
+      tags:
+      - Patient
+  /patient/{id}:
+    delete:
+      description: Realiza uma busca baseada pelo ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Patient
+    get:
+      description: Realiza uma busca baseada pelo ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Patient'
+      tags:
+      - Patient
+    patch:
+      description: Realiza uma edição baseada pelo ID
+      parameters:
+      - description: Patient object
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/models.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Patient
 swagger: "2.0"

@@ -17,8 +17,6 @@ func Run() {
 
 	AuthRequest(r)
 
-	PatientsRequest(r)
-
 	// add swagger
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

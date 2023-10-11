@@ -2,10 +2,10 @@ package models
 
 import "gorm.io/gorm"
 
-type Aluno struct {
+type Professor struct {
 	gorm.Model
 	Nome           string `json:"nome"`
-	DataNascimento string `json:"data_nascimento"`
+	Especializacao string `json:"especializacao"`
+	Contato        string `json:"contato"`
 	UserID         uint   `json:"user_id"`
-	TurmaID        uint   `json:"turma_id"`
 }

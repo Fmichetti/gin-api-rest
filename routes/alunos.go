@@ -12,9 +12,9 @@ func AlunosRequest(r *gin.Engine) {
 
 	protected.Use(middlewares.JwtAuthMiddleware())
 	protected.GET("/alunos", controllers.ExibeTodosAlunos)
-	protected.POST("/alunos", controllers.CriaNovoAluno)
-	protected.GET("/alunos/:id", controllers.BuscaAlunoPorID)
-	protected.GET("/alunos/cpf/:cpf", controllers.BuscaAlunoPorCPF)
-	protected.PATCH("/alunos/:id", controllers.EditaAluno)
-	protected.DELETE("/alunos/:id", controllers.DeletaAlunoPorID)
+	// protected.POST("/alunos", controllers.CriaNovoAluno)
+	// protected.GET("/alunos/:id", controllers.BuscaAlunoPorID)
+	// protected.GET("/alunos/cpf/:cpf", controllers.BuscaAlunoPorCPF)
+	// protected.PATCH("/alunos/:id", controllers.EditaAluno)
+	// protected.DELETE("/alunos/:id", controllers.DeletaAlunoPorID)
 }

@@ -29,5 +29,6 @@ func ConectaComBancoDeDados() {
 		&models.Professor{},
 		&models.Questao{},
 		&models.User{},
+		&models.Turma{},
 	)
 }

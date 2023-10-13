@@ -14,8 +14,8 @@ func Run() {
 	r := gin.Default()
 
 	AlunosRequest(r)
-
 	AuthRequest(r)
+	UserRequest(r)
 
 	// add swagger
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

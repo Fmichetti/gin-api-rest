@@ -35,7 +35,17 @@ func CriaNovoAluno(c *gin.Context) {
 		})
 		return
 	}
-	config.DB.Create(&aluno)
+
+	//verifica se foi adicionado algum aluno
+	if err := config.DB.Create(&aluno).Error; err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+
+		return
+	}
+
 	c.JSON(http.StatusOK, aluno)
 }
 
@@ -58,6 +68,38 @@ func BuscaAlunoPorID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, aluno)
+}
+
+// @Description Realiza uma busca baseada pelo Nome
+// @Tags Alunos
+// @Produce json
+// @Success 200 {object} models.Aluno
+// @Router /alunos/{nome} [get]
+func BuscaAlunoPorNome(c *gin.Context) {
+	var alunos []models.Aluno
+	var requestBody struct {
+		Nome string `json:"nome"`
+	}
+
+	// Bind JSON data from the request body
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Query the database using a partial match on the "nome" field
+	config.DB.Where("nome LIKE ?", "%"+requestBody.Nome+"%").Find(&alunos)
+
+	if len(alunos) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Aluno não encontrado",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, alunos)
 }
 
 // @Description Realiza uma busca baseada pelo ID
@@ -118,24 +160,3 @@ func EditaAluno(c *gin.Context) {
 
 	c.JSON(http.StatusOK, aluno)
 }
-
-// @Description Realiza uma busca baseada pelo CPF
-// @Tags Alunos
-// @Produce json
-// @Success 200 {object} models.Aluno
-// @Router /alunos/{cpf} [get]
-// func BuscaAlunoPorCPF(c *gin.Context) {
-// 	var aluno models.Aluno
-// 	cpf := c.Params.ByName("cpf")
-// 	config.DB.Where(&models.Aluno{CPF: cpf}).First(&aluno)
-
-// 	if aluno.CPF == "" {
-// 		c.JSON(http.StatusNotFound, gin.H{
-// 			"error": "Aluno não encontrado",
-// 		})
-
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, aluno)
-// }

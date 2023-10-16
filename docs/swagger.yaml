@@ -9,9 +9,9 @@ definitions:
     type: object
   models.Aluno:
     properties:
-      cpf:
-        type: string
       createdAt:
+        type: string
+      data_nascimento:
         type: string
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
@@ -19,29 +19,12 @@ definitions:
         type: integer
       nome:
         type: string
-      rg:
-        type: string
-      updatedAt:
-        type: string
-    type: object
-  models.Patient:
-    properties:
-      city:
-        type: string
-      cpf:
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      description:
-        type: string
-      id:
+      turma_id:
         type: integer
-      name:
-        type: string
       updatedAt:
         type: string
+      user_id:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -84,18 +67,6 @@ paths:
             type: array
       tags:
       - Alunos
-  /alunos/{cpf}:
-    get:
-      description: Realiza uma busca baseada pelo CPF
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Aluno'
-      tags:
-      - Alunos
   /alunos/{id}:
     delete:
       description: Realiza uma busca baseada pelo ID
@@ -133,87 +104,16 @@ paths:
           description: OK
       tags:
       - Alunos
-  /patient:
+  /alunos/{nome}:
     get:
-      description: Exibe todos os pacientes
+      description: Realiza uma busca baseada pelo Nome
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/models.Patient'
-            type: array
+            $ref: '#/definitions/models.Aluno'
       tags:
-      - Patient
-    post:
-      description: Cadastra um novo paciente
-      parameters:
-      - description: Patient object
-        in: body
-        name: patient
-        required: true
-        schema:
-          $ref: '#/definitions/models.Patient'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.Patient'
-            type: array
-      tags:
-      - Patient
-  /patient/{cpf}:
-    get:
-      description: Realiza uma busca baseada pelo CPF
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Patient'
-      tags:
-      - Patient
-  /patient/{id}:
-    delete:
-      description: Realiza uma busca baseada pelo ID
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      tags:
-      - Patient
-    get:
-      description: Realiza uma busca baseada pelo ID
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Patient'
-      tags:
-      - Patient
-    patch:
-      description: Realiza uma edição baseada pelo ID
-      parameters:
-      - description: Patient object
-        in: body
-        name: patient
-        required: true
-        schema:
-          $ref: '#/definitions/models.Patient'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      tags:
-      - Patient
+      - Alunos
 swagger: "2.0"

@@ -30,6 +30,8 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	u.Email = input.Email
+
 	u.Password = string(hashedPassword)
 
 	//remove spaces in username

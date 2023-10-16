@@ -16,6 +16,7 @@ func Run() {
 	AlunosRequest(r)
 	AuthRequest(r)
 	UserRequest(r)
+	ProfessoresRequest(r)
 
 	// add swagger
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

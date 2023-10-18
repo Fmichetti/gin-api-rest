@@ -144,6 +144,173 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/professores": {
+            "get": {
+                "description": "Exibe todos os professores",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Professor"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/professores/{id}": {
+            "delete": {
+                "description": "Realiza uma busca baseada pelo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "description": "Realiza uma edição baseada pelo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "parameters": [
+                    {
+                        "description": "Professor object",
+                        "name": "professor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/professores/{nome}": {
+            "get": {
+                "description": "Realiza uma busca baseada pelo Nome",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                }
+            }
+        },
+        "/professors": {
+            "post": {
+                "description": "Cria um novo professor",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "parameters": [
+                    {
+                        "description": "Professor object",
+                        "name": "professor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Professor"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/professors/{id}": {
+            "get": {
+                "description": "Realiza uma busca baseada pelo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                }
+            }
+        },
+        "/questoes": {
+            "post": {
+                "description": "Cria uma nova Questao",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questoes"
+                ],
+                "parameters": [
+                    {
+                        "description": "Questao object",
+                        "name": "questao",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Questao"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Questao"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -156,6 +323,29 @@ const docTemplate = `{
                 "valid": {
                     "description": "Valid is true if Time is not NULL",
                     "type": "boolean"
+                }
+            }
+        },
+        "models.Alternativa": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "resposta": {
+                    "type": "boolean"
+                },
+                "texto": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
@@ -185,6 +375,64 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Professor": {
+            "type": "object",
+            "properties": {
+                "contato": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "especializacao": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Questao": {
+            "type": "object",
+            "properties": {
+                "alternativas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Alternativa"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "enunciado": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "materia_id": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         }

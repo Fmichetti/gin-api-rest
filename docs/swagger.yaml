@@ -1,4 +1,7 @@
 definitions:
+  gin.H:
+    additionalProperties: {}
+    type: object
   gorm.DeletedAt:
     properties:
       time:
@@ -86,9 +89,35 @@ info:
   title: Test API
   version: "1.0"
 paths:
+  /alternativas/{questao_id}:
+    get:
+      parameters:
+      - description: Question ID
+        format: uuid
+        in: path
+        name: questao_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Alternativa'
+            type: array
+      summary: List alternatives for a question
+      tags:
+      - Alternativas
   /alunos:
     get:
-      description: Exibe todos os alunos
+      parameters:
+      - description: Nome do aluno a ser buscado
+        in: query
+        name: nome
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -98,12 +127,12 @@ paths:
             items:
               $ref: '#/definitions/models.Aluno'
             type: array
+      summary: Busca alunos pelo Nome
       tags:
       - Alunos
     post:
-      description: Cria um novo aluno
       parameters:
-      - description: Aluno object
+      - description: Objeto Aluno a ser criado
         in: body
         name: aluno
         required: true
@@ -112,26 +141,38 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            items:
-              $ref: '#/definitions/models.Aluno'
-            type: array
+            $ref: '#/definitions/models.Aluno'
+      summary: Cria um novo aluno
       tags:
       - Alunos
   /alunos/{id}:
     delete:
-      description: Realiza uma busca baseada pelo ID
+      parameters:
+      - description: ID do aluno a ser deletado
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Deleta um aluno pelo ID
       tags:
       - Alunos
     get:
-      description: Realiza uma busca baseada pelo ID
+      parameters:
+      - description: ID do aluno
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -139,12 +180,17 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Aluno'
+      summary: Busca um aluno pelo ID
       tags:
       - Alunos
     patch:
-      description: Realiza uma edição baseada pelo ID
       parameters:
-      - description: Aluno object
+      - description: ID do aluno a ser editado
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Objeto Aluno com as alterações
         in: body
         name: aluno
         required: true
@@ -155,23 +201,13 @@ paths:
       responses:
         "200":
           description: OK
-      tags:
-      - Alunos
-  /alunos/{nome}:
-    get:
-      description: Realiza uma busca baseada pelo Nome
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
           schema:
             $ref: '#/definitions/models.Aluno'
+      summary: Edita um aluno pelo ID
       tags:
       - Alunos
   /professores:
     get:
-      description: Exibe todos os professores
       produces:
       - application/json
       responses:
@@ -181,37 +217,52 @@ paths:
             items:
               $ref: '#/definitions/models.Professor'
             type: array
+      summary: Lista todos os professores
+      tags:
+      - Professores
+    post:
+      parameters:
+      - description: Objeto Professor a ser criado
+        in: body
+        name: professor
+        required: true
+        schema:
+          $ref: '#/definitions/models.Professor'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Cria um novo professor
       tags:
       - Professores
   /professores/{id}:
     delete:
-      description: Realiza uma busca baseada pelo ID
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      tags:
-      - Professores
-    patch:
-      description: Realiza uma edição baseada pelo ID
       parameters:
-      - description: Professor object
-        in: body
-        name: professor
+      - description: ID do professor a ser deletado
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.Professor'
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Deleta um professor pelo ID
       tags:
       - Professores
-  /professores/{nome}:
     get:
-      description: Realiza uma busca baseada pelo Nome
+      parameters:
+      - description: ID do professor
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -219,18 +270,40 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Professor'
+      summary: Busca um professor pelo ID
       tags:
       - Professores
-  /professors:
-    post:
-      description: Cria um novo professor
+    patch:
       parameters:
-      - description: Professor object
+      - description: ID do professor a ser editado
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Objeto Professor com as alterações
         in: body
         name: professor
         required: true
         schema:
           $ref: '#/definitions/models.Professor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Professor'
+      summary: Edita um professor pelo ID
+      tags:
+      - Professores
+  /professores/{nome}:
+    post:
+      parameters:
+      - description: Nome do professor a ser buscado
+        in: query
+        name: nome
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -240,30 +313,11 @@ paths:
             items:
               $ref: '#/definitions/models.Professor'
             type: array
-      tags:
-      - Professores
-  /professors/{id}:
-    get:
-      description: Realiza uma busca baseada pelo ID
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Professor'
+      summary: Busca professores pelo Nome
       tags:
       - Professores
   /questoes:
-    post:
-      description: Cria uma nova Questao
-      parameters:
-      - description: Questao object
-        in: body
-        name: questao
-        required: true
-        schema:
-          $ref: '#/definitions/models.Questao'
+    get:
       produces:
       - application/json
       responses:
@@ -273,6 +327,25 @@ paths:
             items:
               $ref: '#/definitions/models.Questao'
             type: array
+      summary: Exibe todas as Questoes
+      tags:
+      - Questoes
+    post:
+      parameters:
+      - description: Objeto Questao a ser criado
+        in: body
+        name: questao
+        required: true
+        schema:
+          $ref: '#/definitions/models.Questao'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Questao'
+      summary: Cria uma nova Questao
       tags:
       - Questoes
 swagger: "2.0"

@@ -15,14 +15,55 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/alternativas/{questao_id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Alternativas"
+                ],
+                "summary": "List alternatives for a question",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Question ID",
+                        "name": "questao_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Alternativa"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/alunos": {
             "get": {
-                "description": "Exibe todos os alunos",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Alunos"
+                ],
+                "summary": "Busca alunos pelo Nome",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Nome do aluno a ser buscado",
+                        "name": "nome",
+                        "in": "query",
+                        "required": true
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -37,16 +78,16 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Cria um novo aluno",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Alunos"
                 ],
+                "summary": "Cria um novo aluno",
                 "parameters": [
                     {
-                        "description": "Aluno object",
+                        "description": "Objeto Aluno a ser criado",
                         "name": "aluno",
                         "in": "body",
                         "required": true,
@@ -56,13 +97,10 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Aluno"
-                            }
+                            "$ref": "#/definitions/models.Aluno"
                         }
                     }
                 }
@@ -70,12 +108,21 @@ const docTemplate = `{
         },
         "/alunos/{id}": {
             "get": {
-                "description": "Realiza uma busca baseada pelo ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Alunos"
+                ],
+                "summary": "Busca um aluno pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do aluno",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -87,30 +134,49 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Realiza uma busca baseada pelo ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Alunos"
                 ],
+                "summary": "Deleta um aluno pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do aluno a ser deletado",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
                     }
                 }
             },
             "patch": {
-                "description": "Realiza uma edição baseada pelo ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Alunos"
                 ],
+                "summary": "Edita um aluno pelo ID",
                 "parameters": [
                     {
-                        "description": "Aluno object",
+                        "type": "string",
+                        "description": "ID do aluno a ser editado",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Objeto Aluno com as alterações",
                         "name": "aluno",
                         "in": "body",
                         "required": true,
@@ -118,22 +184,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Aluno"
                         }
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/alunos/{nome}": {
-            "get": {
-                "description": "Realiza uma busca baseada pelo Nome",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Alunos"
                 ],
                 "responses": {
                     "200": {
@@ -147,13 +197,13 @@ const docTemplate = `{
         },
         "/professores": {
             "get": {
-                "description": "Exibe todos os professores",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Professores"
                 ],
+                "summary": "Lista todos os professores",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -162,37 +212,110 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Professor"
                             }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "summary": "Cria um novo professor",
+                "parameters": [
+                    {
+                        "description": "Objeto Professor a ser criado",
+                        "name": "professor",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
                         }
                     }
                 }
             }
         },
         "/professores/{id}": {
-            "delete": {
-                "description": "Realiza uma busca baseada pelo ID",
+            "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Professores"
                 ],
+                "summary": "Busca um professor pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do professor",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Professor"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Professores"
+                ],
+                "summary": "Deleta um professor pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do professor a ser deletado",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
                     }
                 }
             },
             "patch": {
-                "description": "Realiza uma edição baseada pelo ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Professores"
                 ],
+                "summary": "Edita um professor pelo ID",
                 "parameters": [
                     {
-                        "description": "Professor object",
+                        "type": "string",
+                        "description": "ID do professor a ser editado",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Objeto Professor com as alterações",
                         "name": "professor",
                         "in": "body",
                         "required": true,
@@ -200,22 +323,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Professor"
                         }
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/professores/{nome}": {
-            "get": {
-                "description": "Realiza uma busca baseada pelo Nome",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Professores"
                 ],
                 "responses": {
                     "200": {
@@ -227,24 +334,22 @@ const docTemplate = `{
                 }
             }
         },
-        "/professors": {
+        "/professores/{nome}": {
             "post": {
-                "description": "Cria um novo professor",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Professores"
                 ],
+                "summary": "Busca professores pelo Nome",
                 "parameters": [
                     {
-                        "description": "Professor object",
-                        "name": "professor",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Professor"
-                        }
+                        "type": "string",
+                        "description": "Nome do professor a ser buscado",
+                        "name": "nome",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -260,45 +365,15 @@ const docTemplate = `{
                 }
             }
         },
-        "/professors/{id}": {
-            "get": {
-                "description": "Realiza uma busca baseada pelo ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Professores"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Professor"
-                        }
-                    }
-                }
-            }
-        },
         "/questoes": {
-            "post": {
-                "description": "Cria uma nova Questao",
+            "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Questoes"
                 ],
-                "parameters": [
-                    {
-                        "description": "Questao object",
-                        "name": "questao",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Questao"
-                        }
-                    }
-                ],
+                "summary": "Exibe todas as Questoes",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -310,10 +385,42 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questoes"
+                ],
+                "summary": "Cria uma nova Questao",
+                "parameters": [
+                    {
+                        "description": "Objeto Questao a ser criado",
+                        "name": "questao",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Questao"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Questao"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        },
         "gorm.DeletedAt": {
             "type": "object",
             "properties": {

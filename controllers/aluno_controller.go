@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Description Exibe todos os alunos
+// @Summary Lista todos os alunos
 // @Tags Alunos
 // @Produce json
-// @Success 200 {object} []models.Aluno
+// @Success 200 {array} models.Aluno
 // @Router /alunos [get]
 func ExibeTodosAlunos(c *gin.Context) {
 	var alunos []models.Aluno
@@ -21,11 +21,11 @@ func ExibeTodosAlunos(c *gin.Context) {
 	c.JSON(http.StatusOK, alunos)
 }
 
-// @Description Cria um novo aluno
+// @Summary Cria um novo aluno
 // @Tags Alunos
 // @Produce json
-// @Param aluno body models.Aluno true "Aluno object"
-// @Success 200 {object} []models.Aluno
+// @Param aluno body models.Aluno true "Objeto Aluno a ser criado"
+// @Success 201 {object} models.Aluno
 // @Router /alunos [post]
 func CriaNovoAluno(c *gin.Context) {
 	var aluno models.Aluno
@@ -49,9 +49,10 @@ func CriaNovoAluno(c *gin.Context) {
 	c.JSON(http.StatusOK, aluno)
 }
 
-// @Description Realiza uma busca baseada pelo ID
+// @Summary Busca um aluno pelo ID
 // @Tags Alunos
 // @Produce json
+// @Param id path string true "ID do aluno"
 // @Success 200 {object} models.Aluno
 // @Router /alunos/{id} [get]
 func BuscaAlunoPorID(c *gin.Context) {
@@ -70,11 +71,12 @@ func BuscaAlunoPorID(c *gin.Context) {
 	c.JSON(http.StatusOK, aluno)
 }
 
-// @Description Realiza uma busca baseada pelo Nome
+// @Summary Busca alunos pelo Nome
 // @Tags Alunos
 // @Produce json
-// @Success 200 {object} models.Aluno
-// @Router /alunos/{nome} [get]
+// @Param nome query string true "Nome do aluno a ser buscado"
+// @Success 200 {array} models.Aluno
+// @Router /alunos [get]
 func BuscaAlunoPorNome(c *gin.Context) {
 	var alunos []models.Aluno
 	var requestBody struct {
@@ -102,10 +104,11 @@ func BuscaAlunoPorNome(c *gin.Context) {
 	c.JSON(http.StatusOK, alunos)
 }
 
-// @Description Realiza uma busca baseada pelo ID
+// @Summary Deleta um aluno pelo ID
 // @Tags Alunos
 // @Produce json
-// @Success 200
+// @Param id path string true "ID do aluno a ser deletado"
+// @Success 200 {object} gin.H
 // @Router /alunos/{id} [delete]
 func DeletaAlunoPorID(c *gin.Context) {
 	var aluno models.Aluno
@@ -127,11 +130,12 @@ func DeletaAlunoPorID(c *gin.Context) {
 	})
 }
 
-// @Description Realiza uma edição baseada pelo ID
+// @Summary Edita um aluno pelo ID
 // @Tags Alunos
 // @Produce json
-// @Param aluno body models.Aluno true "Aluno object"
-// @Success 200
+// @Param id path string true "ID do aluno a ser editado"
+// @Param aluno body models.Aluno true "Objeto Aluno com as alterações"
+// @Success 200 {object} models.Aluno
 // @Router /alunos/{id} [patch]
 func EditaAluno(c *gin.Context) {
 	var aluno models.Aluno

@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Description Cria uma nova Questao
+// @Summary Cria uma nova Questao
 // @Tags Questoes
 // @Produce json
-// @Param questao body models.Questao true "Questao object"
-// @Success 200 {object} []models.Questao
+// @Param questao body models.Questao true "Objeto Questao a ser criado"
+// @Success 201 {object} models.Questao
 // @Router /questoes [post]
 func CriarQuestao(c *gin.Context) {
 	var questao models.Questao
@@ -34,10 +34,10 @@ func CriarQuestao(c *gin.Context) {
 
 }
 
-// @Description Exibe todas as Questoes
+// @Summary Exibe todas as Questoes
 // @Tags Questoes
 // @Produce json
-// @Success 200 {object} []models.Questao
+// @Success 200 {array} models.Questao
 // @Router /questoes [get]
 func ListarQuestoes(c *gin.Context) {
 	var questoes []models.Questao
@@ -47,7 +47,13 @@ func ListarQuestoes(c *gin.Context) {
 	c.JSON(http.StatusOK, questoes)
 }
 
-// ListAlternativas lista as alternativas de uma determinada questão
+// ListAlternativasQuestao retrieves a list of alternatives for a specific question.
+// @Summary List alternatives for a question
+// @Tags Alternativas
+// @Produce json
+// @Param questao_id path string true "Question ID" Format(uuid)
+// @Success 200 {array} models.Alternativa
+// @Router /alternativas/{questao_id} [get]
 func ListAlternativasQuestao(c *gin.Context) {
 	questaoID := c.Param("questao_id") // Recupera o ID da questão a partir dos parâmetros da URL
 

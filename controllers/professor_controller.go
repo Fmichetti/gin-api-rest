@@ -8,10 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Description Exibe todos os professores
+// @Summary Lista todos os professores
 // @Tags Professores
 // @Produce json
-// @Success 200 {object} []models.Professor
+// @Success 200 {array} models.Professor
 // @Router /professores [get]
 func ExibeTodosProfessores(c *gin.Context) {
 	var professores []models.Professor
@@ -21,12 +21,12 @@ func ExibeTodosProfessores(c *gin.Context) {
 	c.JSON(http.StatusOK, professores)
 }
 
-// @Description Cria um novo professor
+// @Summary Cria um novo professor
 // @Tags Professores
 // @Produce json
-// @Param professor body models.Professor true "Professor object"
-// @Success 200 {object} []models.Professor
-// @Router /professors [post]
+// @Param professor body models.Professor true "Objeto Professor a ser criado"
+// @Success 201 {object} models.Professor
+// @Router /professores [post]
 func CriaNovoProfessor(c *gin.Context) {
 	var professor models.Professor
 	//verifica se o JSON esta correto
@@ -63,11 +63,12 @@ func CriaNovoProfessor(c *gin.Context) {
 	c.JSON(http.StatusOK, professor)
 }
 
-// @Description Realiza uma busca baseada pelo ID
+// @Summary Busca um professor pelo ID
 // @Tags Professores
 // @Produce json
+// @Param id path string true "ID do professor"
 // @Success 200 {object} models.Professor
-// @Router /professors/{id} [get]
+// @Router /professores/{id} [get]
 func BuscaProfessorPorID(c *gin.Context) {
 	var professor models.Professor
 	id := c.Params.ByName("id")
@@ -84,11 +85,12 @@ func BuscaProfessorPorID(c *gin.Context) {
 	c.JSON(http.StatusOK, professor)
 }
 
-// @Description Realiza uma busca baseada pelo Nome
+// @Summary Busca professores pelo Nome
 // @Tags Professores
 // @Produce json
-// @Success 200 {object} models.Professor
-// @Router /professores/{nome} [get]
+// @Param nome query string true "Nome do professor a ser buscado"
+// @Success 200 {array} models.Professor
+// @Router /professores/{nome} [post]
 func BuscaProfessorPorNome(c *gin.Context) {
 	var professores []models.Professor
 	var requestBody struct {
@@ -116,10 +118,11 @@ func BuscaProfessorPorNome(c *gin.Context) {
 	c.JSON(http.StatusOK, professores)
 }
 
-// @Description Realiza uma busca baseada pelo ID
+// @Summary Deleta um professor pelo ID
 // @Tags Professores
 // @Produce json
-// @Success 200
+// @Param id path string true "ID do professor a ser deletado"
+// @Success 200 {object} gin.H
 // @Router /professores/{id} [delete]
 func DeletaProfessorPorID(c *gin.Context) {
 	var professor models.Professor
@@ -141,11 +144,12 @@ func DeletaProfessorPorID(c *gin.Context) {
 	})
 }
 
-// @Description Realiza uma edição baseada pelo ID
+// @Summary Edita um professor pelo ID
 // @Tags Professores
 // @Produce json
-// @Param professor body models.Professor true "Professor object"
-// @Success 200
+// @Param id path string true "ID do professor a ser editado"
+// @Param professor body models.Professor true "Objeto Professor com as alterações"
+// @Success 200 {object} models.Professor
 // @Router /professores/{id} [patch]
 func EditaProfessor(c *gin.Context) {
 	var professor models.Professor

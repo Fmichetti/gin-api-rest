@@ -20,6 +20,8 @@ func Run() {
 	QuestoesRequest(r)
 
 	// add swagger
+	// swagger url:
+	// http://localhost:8080/docs/index.html
 	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run()

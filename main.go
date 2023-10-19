@@ -8,7 +8,7 @@ import (
 
 // @title Test API
 // @version 1.0
-// @description A Test API using GO, Gin and Gorm
+// @description Api para criação, correção e execução de Avaliações Escolares
 
 // @host localhost:8080
 

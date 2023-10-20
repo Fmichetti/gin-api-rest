@@ -118,8 +118,8 @@ func DeletaAlunoPorID(c *gin.Context) {
 	//verifica se foi removido algum aluno
 	if db.RowsAffected < 1 {
 
-		c.JSON(http.StatusOK, gin.H{
-			"data": "Aluno não existente!",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Aluno não existente!",
 		})
 
 		return
@@ -155,8 +155,8 @@ func EditaAluno(c *gin.Context) {
 	//verifica se foi editado algum aluno
 	if db.RowsAffected < 1 {
 
-		c.JSON(http.StatusOK, gin.H{
-			"data": "Aluno não existente!",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Aluno não existente!",
 		})
 
 		return

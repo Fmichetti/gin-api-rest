@@ -65,3 +65,23 @@ func ListAlternativasQuestao(c *gin.Context) {
 
 	c.JSON(http.StatusOK, questao.Alternativas)
 }
+
+// @Summary Deleta uma questao pelo ID
+// @Tags Questao
+// @Produce json
+// @Param id path string true "ID da questao a ser deleteda"
+// @Success 200 {object} gin.H
+// @Router /questoes/{id} [delete]
+func ExcluirQuestao(c *gin.Context) {
+	var questao models.Questao
+	id := c.Params.ByName("id")
+	db := config.DB.Delete(&questao, id)
+
+	//verifica se aconteceu a remocao
+
+	if db.RowsAffected > 1 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Aluno nao existente!",
+		})
+	}
+}

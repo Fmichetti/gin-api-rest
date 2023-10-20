@@ -15,6 +15,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/alternativas/{avaliacao_id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Avaliacao"
+                ],
+                "summary": "List questions for a test",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Avaliacao ID",
+                        "name": "avaliacao_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Alternativa"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/alternativas/{questao_id}": {
             "get": {
                 "produces": [
@@ -414,6 +446,34 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/questoes/{id}": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questao"
+                ],
+                "summary": "Deleta uma questao pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID da questao a ser deleteda",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -485,6 +545,41 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Avaliacao": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "descricao": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "materia_id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "questoes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Questao"
+                    }
+                },
+                "turma_id": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Professor": {
             "type": "object",
             "properties": {
@@ -553,7 +648,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Test API",
-	Description:      "A Test API using GO, Gin and Gorm",
+	Description:      "Api para criação, correção e execução de Avaliações Escolares",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

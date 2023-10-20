@@ -1,13 +1,45 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "A Test API using GO, Gin and Gorm",
+        "description": "Api para criação, correção e execução de Avaliações Escolares",
         "title": "Test API",
         "contact": {},
         "version": "1.0"
     },
     "host": "localhost:8080",
     "paths": {
+        "/alternativas/{avaliacao_id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Avaliacao"
+                ],
+                "summary": "List questions for a test",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Avaliacao ID",
+                        "name": "avaliacao_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Alternativa"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/alternativas/{questao_id}": {
             "get": {
                 "produces": [
@@ -407,6 +439,34 @@
                     }
                 }
             }
+        },
+        "/questoes/{id}": {
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Questao"
+                ],
+                "summary": "Deleta uma questao pelo ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID da questao a ser deleteda",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/gin.H"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -475,6 +535,41 @@
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Avaliacao": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "descricao": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "materia_id": {
+                    "type": "integer"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "questoes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Questao"
+                    }
+                },
+                "turma_id": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

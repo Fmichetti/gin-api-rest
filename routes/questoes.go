@@ -14,5 +14,6 @@ func QuestoesRequest(r *gin.Engine) {
 	protected.POST("/questoes", controllers.CriarQuestao)
 	protected.GET("/questoes", controllers.ListarQuestoes)
 	protected.GET("/questoes/:questao_id/alternativas", controllers.ListAlternativasQuestao)
+	protected.DELETE("/questoes/:questao_id/", controllers.ExcluirQuestao)
 
 }

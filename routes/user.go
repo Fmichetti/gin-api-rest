@@ -12,4 +12,6 @@ func UserRequest(r *gin.Engine) {
 	protected.Use(middlewares.JwtAuthMiddleware())
 
 	protected.GET("/user/:id", controllers.ExibeUsuarioPorID)
+
+	protected.GET("/users", controllers.ExibeTodosUsers)
 }

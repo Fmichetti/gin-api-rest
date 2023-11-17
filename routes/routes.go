@@ -3,6 +3,7 @@ package routes
 import (
 
 	// docs "github.com/FMichetti/api-go-gin/docs"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -12,6 +13,9 @@ import (
 func Run() {
 
 	r := gin.Default()
+
+	// Enable CORS with default configuration
+	r.Use(cors.Default())
 
 	AlunosRequest(r)
 	AuthRequest(r)

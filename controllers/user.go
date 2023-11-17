@@ -23,3 +23,11 @@ func ExibeUsuarioPorID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, user)
 }
+
+func ExibeTodosUsers(c *gin.Context) {
+	var users []models.User
+
+	config.DB.Find(&users)
+
+	c.JSON(http.StatusOK, users)
+}

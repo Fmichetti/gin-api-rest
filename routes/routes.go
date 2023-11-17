@@ -14,14 +14,21 @@ func Run() {
 
 	r := gin.Default()
 
-	// Enable CORS with default configuration
-	r.Use(cors.Default())
+	// CORS middleware with custom configuration
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:4200"}, // Add your frontend's origin here
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           86400, // 24 hours
+	}))
 
 	AlunosRequest(r)
 	AuthRequest(r)
 	UserRequest(r)
 	ProfessoresRequest(r)
 	QuestoesRequest(r)
+	TurmasRequest(r)
 
 	// add swagger
 	// swagger url:

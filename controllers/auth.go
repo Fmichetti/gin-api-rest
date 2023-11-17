@@ -44,7 +44,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "registration success"})
+	c.JSON(http.StatusOK, gin.H{"message": "registration success", "id": u.ID})
 }
 
 func Login(c *gin.Context) {

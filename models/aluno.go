@@ -12,4 +12,5 @@ type Aluno struct {
 	DataNascimento time.Time `json:"data_nascimento"`
 	UserID         uint      `json:"user_id" gorm:"unique"`
 	TurmaID        uint      `json:"turma_id"`
+	Turma          Turma     `gorm:"foreignKey:TurmaID"`
 }

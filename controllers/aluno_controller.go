@@ -13,12 +13,28 @@ import (
 // @Produce json
 // @Success 200 {array} models.Aluno
 // @Router /alunos [get]
+// ExibeTodosAlunos retorna todos os alunos com apenas os campos desejados
+// ExibeTodosAlunos retorna todos os alunos com apenas os campos desejados
+// ExibeTodosAlunos retorna todos os alunos com apenas os campos desejados
 func ExibeTodosAlunos(c *gin.Context) {
 	var alunos []models.Aluno
+	var alunoResponses []models.AlunoResponse
 
 	config.DB.Find(&alunos)
 
-	c.JSON(http.StatusOK, alunos)
+	for _, aluno := range alunos {
+
+		config.DB.Model(&aluno).Preload("Turma").Find(&aluno)
+
+		alunoResponse := models.AlunoResponse{
+			ID:    aluno.ID,
+			Nome:  aluno.Nome,
+			Turma: aluno.Turma.Nome, // Certifique-se de que Turma é a relação correta
+		}
+		alunoResponses = append(alunoResponses, alunoResponse)
+	}
+
+	c.JSON(http.StatusOK, alunoResponses)
 }
 
 // @Summary Cria um novo aluno
@@ -55,10 +71,16 @@ func CriaNovoAluno(c *gin.Context) {
 // @Param id path string true "ID do aluno"
 // @Success 200 {object} models.Aluno
 // @Router /alunos/{id} [get]
+// @Summary Busca um aluno pelo ID
+// @Tags Alunos
+// @Produce json
+// @Param id path string true "ID do aluno"
+// @Success 200 {object} AlunoResponse
+// @Router /alunos/{id} [get]
 func BuscaAlunoPorID(c *gin.Context) {
 	var aluno models.Aluno
 	id := c.Params.ByName("id")
-	config.DB.First(&aluno, id)
+	config.DB.Preload("Turma").First(&aluno, id)
 
 	if aluno.ID == 0 {
 		c.JSON(http.StatusNotFound, gin.H{

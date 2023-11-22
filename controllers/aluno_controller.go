@@ -27,9 +27,9 @@ func ExibeTodosAlunos(c *gin.Context) {
 		config.DB.Model(&aluno).Preload("Turma").Find(&aluno)
 
 		alunoResponse := models.AlunoResponse{
-			ID:    aluno.ID,
-			Nome:  aluno.Nome,
-			Turma: aluno.Turma.Nome, // Certifique-se de que Turma é a relação correta
+			Matricula: aluno.Matricula,
+			Nome:      aluno.Nome,
+			Turma:     aluno.Turma.Nome, // Certifique-se de que Turma é a relação correta
 		}
 		alunoResponses = append(alunoResponses, alunoResponse)
 	}

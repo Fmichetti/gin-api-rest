@@ -10,7 +10,7 @@ func AvaliacaoRequest(r *gin.Engine) {
 
 	protected := r.Group("/api")
 
-	protected.Use(middlewares.JwtAuthMiddleware())
+	protected.Use(middlewares.JwtAuthMiddleware("professor"))
 	protected.POST("/avaliacoes", controllers.CriarAvaliacao)
 	protected.GET("/avaliacoes", controllers.ListQuestoesAvaliacao)
 	protected.DELETE("/avaliacoes/:id", controllers.ExcluirAvaliacao)

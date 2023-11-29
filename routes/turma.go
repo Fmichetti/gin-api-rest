@@ -10,7 +10,7 @@ func TurmasRequest(r *gin.Engine) {
 
 	protected := r.Group("/api")
 
-	protected.Use(middlewares.JwtAuthMiddleware())
+	protected.Use(middlewares.JwtAuthMiddleware("professor"))
 	protected.POST("/turmas", controllers.CriarTurma)
 	protected.GET("/turmas", controllers.ExibeTodasTurmas)
 }

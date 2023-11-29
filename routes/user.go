@@ -9,7 +9,7 @@ import (
 func UserRequest(r *gin.Engine) {
 	protected := r.Group("/api")
 
-	protected.Use(middlewares.JwtAuthMiddleware())
+	protected.Use(middlewares.JwtAuthMiddleware("professor"))
 
 	protected.GET("/user/:id", controllers.ExibeUsuarioPorID)
 

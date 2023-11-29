@@ -10,7 +10,7 @@ func AlunosRequest(r *gin.Engine) {
 
 	protected := r.Group("/api")
 
-	protected.Use(middlewares.JwtAuthMiddleware())
+	protected.Use(middlewares.JwtAuthMiddleware("professor"))
 	protected.GET("/alunos", controllers.ExibeTodosAlunos)
 	protected.POST("/alunos", controllers.CriaNovoAluno)
 	protected.GET("/alunos/:id", controllers.BuscaAlunoPorID)

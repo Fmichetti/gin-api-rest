@@ -102,8 +102,9 @@ func Login(c *gin.Context) {
 
 	u.Username = input.Username
 	u.Password = input.Password
+	u.UserType = input.UserType
 
-	token, err := LoginCheck(u.Username, u.Password)
+	token, err := LoginCheck(u.Username, u.Password, u.UserType)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
@@ -113,13 +114,13 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-func LoginCheck(username string, password string) (string, error) {
+func LoginCheck(username string, password string, user_type string) (string, error) {
 
 	var err error
 
 	u := models.User{}
 
-	err = config.DB.Model(models.User{}).Where("username = ?", username).Take(&u).Error
+	err = config.DB.Model(models.User{}).Where("username = ? AND user_type = ?", username, user_type).Take(&u).Error
 
 	if err != nil {
 		return "", err

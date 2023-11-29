@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/FMichetti/api-go-gin/config"
 	"github.com/FMichetti/api-go-gin/models"
@@ -11,40 +12,82 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Register(c *gin.Context) {
-	var input models.User
-	var err error
+func RegistraAluno(c *gin.Context) {
+	var input struct {
+		Username  string `json:"username" binding:"required"`
+		Email     string `json:"email" binding:"required"`
+		Password  string `json:"password" binding:"required"`
+		UserType  string `json:"user_type" binding:"required"`
+		AlunoData struct {
+			Nome           string    `json:"nome"`
+			Matricula      string    `json:"matricula"`
+			DataNascimento time.Time `json:"data_nascimento"`
+			TurmaID        uint      `json:"turma_id"`
+		} `json:"aluno_data"`
+	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	u := models.User{}
+	user := models.User{}
+	user.Username = input.Username
+	user.Email = input.Email
+	user.Password = input.Password
+	user.UserType = input.UserType
 
-	//turn password into hash
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	userId, err := CriaUsuario(user)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	u.Email = input.Email
+	aluno := models.Aluno{
+		UserID:         userId,
+		Nome:           input.AlunoData.Nome,
+		Matricula:      input.AlunoData.Matricula,
+		DataNascimento: input.AlunoData.DataNascimento,
+		TurmaID:        input.AlunoData.TurmaID,
+	}
+
+	err = config.DB.Create(&aluno).Error
+
+	if err != nil {
+		status := DeletaUserPorID(userId)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "status": status})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Aluno registrado com sucesso!", "id": aluno.ID})
+}
+
+func CriaUsuario(user models.User) (uint, error) {
+	var err error
+
+	u := user
+
+	//turn password into hash
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+		return 0, err
+	}
 
 	u.Password = string(hashedPassword)
 
 	//remove spaces in username
-	u.Username = strings.ReplaceAll(input.Username, " ", "")
+	u.Username = strings.ReplaceAll(user.Username, " ", "")
 
 	err = config.DB.Create(&u).Error
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		return 0, err
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "registration success", "id": u.ID})
+	return u.ID, nil
 }
 
 func Login(c *gin.Context) {
@@ -100,4 +143,17 @@ func LoginCheck(username string, password string) (string, error) {
 
 func VerifyPassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+
+func DeletaUserPorID(id uint) string {
+	var user models.User
+
+	db := config.DB.Delete(&user, id)
+
+	//verifica se foi removido algum aluno
+	if db.RowsAffected < 1 {
+		return "Erro ao remover usuario"
+	}
+
+	return "OK"
 }
